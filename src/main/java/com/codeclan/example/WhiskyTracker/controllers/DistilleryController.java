@@ -1,6 +1,7 @@
 package com.codeclan.example.WhiskyTracker.controllers;
 
 import com.codeclan.example.WhiskyTracker.models.Distillery;
+import com.codeclan.example.WhiskyTracker.models.Whisky;
 import com.codeclan.example.WhiskyTracker.repositories.DistilleryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,12 @@ public class DistilleryController {
 
     // INDEX
     @GetMapping(value = "/distilleries")
-    public ResponseEntity<List<Distillery>> getAllDistilleries(@RequestParam(name = "region", required = false) String region) {
+    public ResponseEntity<List<Distillery>> getAllDistilleries(@RequestParam(name = "region", required = false) String region,
+                                                               @RequestParam(name = "whiskyAge", required = false) Integer whiskyAge) {
 
+        if (whiskyAge != null) {
+            return new ResponseEntity<>(distilleryRepository.findByWhiskiesAge(whiskyAge), HttpStatus.OK);
+        }
 
         if (region != null) {
             return new ResponseEntity<>(distilleryRepository.findByRegion(region), HttpStatus.OK);
